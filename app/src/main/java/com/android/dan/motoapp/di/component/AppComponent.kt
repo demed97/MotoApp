@@ -2,10 +2,7 @@ package com.android.dan.motoapp.di.component
 
 import android.app.Application
 import com.android.dan.motoapp.App
-import com.android.dan.motoapp.di.modules.ActivityModule
-import com.android.dan.motoapp.di.modules.RetrofitModule
-import com.android.dan.motoapp.di.modules.SharedPreferencesModule
-import com.android.dan.motoapp.di.modules.ViewModelModule
+import com.android.dan.motoapp.di.modules.*
 import dagger.BindsInstance
 import dagger.Component
 import dagger.android.AndroidInjector
@@ -22,7 +19,8 @@ import javax.inject.Singleton
         ActivityModule::class,
         RetrofitModule::class,
         SharedPreferencesModule::class,
-        ViewModelModule::class]
+        ViewModelModule::class,
+        RecyclerModule::class]
 )
 interface AppComponent : AndroidInjector<DaggerApplication> {
 
