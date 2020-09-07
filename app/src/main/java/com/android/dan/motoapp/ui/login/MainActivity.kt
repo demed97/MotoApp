@@ -2,6 +2,7 @@ package com.android.dan.motoapp.ui.login
 
 import android.content.Context
 import android.content.Intent
+import android.content.SharedPreferences
 import android.net.ConnectivityManager
 import android.net.Network
 import android.net.NetworkRequest
@@ -23,6 +24,8 @@ import javax.inject.Inject
 
 class MainActivity : DaggerAppCompatActivity() {
 
+    //    @Inject
+//    lateinit var preferences: SharedPreferences
     @Inject
     lateinit var factory: ViewModelFactory
     lateinit var loginViewModel: LoginViewModel
@@ -34,15 +37,25 @@ class MainActivity : DaggerAppCompatActivity() {
         checkConnection()
         observeToLiveData()
 
+
         val mainBinding =
             DataBindingUtil.setContentView<ActivityMainBinding>(this, R.layout.activity_main)
         mainBinding.loginViewModel = loginViewModel
+        checkAuthorization()
+    }
+
+    private fun checkAuthorization() {
+        loginViewModel.checkAuthorization()
     }
 
     private fun observeToLiveData() {
         loginViewModel.chooseActivityLiveData.observe(this, Observer {
-            startActivity(Intent(this, MotoActivity::class.java))
+            startMotoActivity()
         })
+    }
+
+    private fun startMotoActivity() {
+        startActivity(Intent(this, MotoActivity::class.java))
     }
 
     private fun showSnackbar() {

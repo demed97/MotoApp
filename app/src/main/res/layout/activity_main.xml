@@ -7,6 +7,10 @@
         <variable
             name="loginViewModel"
             type="com.android.dan.motoapp.ui.login.LoginViewModel" />
+        <variable
+            name="login"
+            type="com.android.dan.motoapp.entities.Login"
+            />
         
     </data>
 
@@ -20,7 +24,7 @@
             android:id="@+id/loginField"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="@={loginViewModel.email}"
+            android:text="@={loginViewModel.login.username}"
             android:hint="Edit login"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"/>
@@ -30,7 +34,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:hint="Edit password"
-            android:text="@={loginViewModel.password}"
+            android:text="@={loginViewModel.login.password}"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/loginField" />
 
@@ -42,6 +46,17 @@
             android:text="authorize"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/passwordField"/>
+
+        <CheckBox
+            android:id="@+id/checkBox"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Remember"
+            android:layout_marginTop="10dp"
+            android:layout_marginStart="20dp"
+            android:onCheckedChanged="@{(view, checked) -> checked ? loginViewModel.onEnabled() : loginViewModel.onDisabled()}"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/loginButton" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

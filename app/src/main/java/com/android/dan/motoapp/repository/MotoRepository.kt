@@ -10,8 +10,9 @@ class MotoRepository (var api: Api, val motoDao: MotoDao) {
     suspend fun getMoto(): Result {
         val response = api.getMoto()
         return if (response.isSuccessful) {
-//            motoDao.addAllBook(response.body()!!)
-            Result.SuccessResult(response.body()!!)
+            motoDao.deleteAllMoto()
+            motoDao.addAllMoto(response.body()!!)
+            Result.SuccessResult(motoDao.getAllMoto())
         } else
             Result.ExceptionResult(response.errorBody()?.string() ?: "Something goes wrong")
     }

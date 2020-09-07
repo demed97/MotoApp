@@ -10,8 +10,11 @@ import com.android.dan.motoapp.entities.Moto
 interface MotoDao {
 
     @Query("SELECT * FROM moto")
-    fun getAllMoto () : List<Moto>
+    suspend fun getAllMoto(): List<Moto>
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    fun addAllMoto(listMoto: List<Moto>)
+    suspend fun addAllMoto(listMoto: List<Moto>)
+
+    @Query("DELETE FROM moto")
+    suspend fun deleteAllMoto()
 }

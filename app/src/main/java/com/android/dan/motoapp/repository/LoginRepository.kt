@@ -5,12 +5,17 @@ import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.android.dan.motoapp.api.Api
+import com.android.dan.motoapp.database.login.LoginDao
 import com.android.dan.motoapp.entities.Login
 import com.android.dan.motoapp.entities.Token
 import com.android.dan.motoapp.utils.Result
 import javax.inject.Inject
 
-class LoginRepository @Inject constructor(var api: Api, var sharedPreferences: SharedPreferences) {
+class LoginRepository @Inject constructor(
+    var api: Api,
+    var sharedPreferences: SharedPreferences,
+    val loginDao: LoginDao
+) {
 
     suspend fun apiLogin(login: Login): Result {
         val response = api.login(login)
@@ -33,6 +38,25 @@ class LoginRepository @Inject constructor(var api: Api, var sharedPreferences: S
             Log.d("TAG", "ERROR")
             Result.ExceptionResult(response.errorBody()?.string() ?: "Something goes wrong")
         }
+    }
+
+    suspend fun checkAuthorization(): Result {
+        val login = loginDao.getLogin()
+        return if (login.isEmpty()){
+            Result.ExceptionResult("empty")
+        }else
+            Result.SuccessResult(login[0]!!)
+
+    }
+
+    suspend fun isRememberLogin(login: Login, check: Boolean) {
+        if (check) {
+            loginDao.addNewLogin(login)
+            Log.d("TAG", "${login.username}, ${login.password}")
+        }
+//        sharedPreferences.edit()
+//            .putBoolean("check", check)
+//            .apply()
     }
 
 }

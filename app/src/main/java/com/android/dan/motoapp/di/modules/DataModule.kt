@@ -8,6 +8,8 @@ import androidx.room.Room
 import com.android.dan.motoapp.api.Api
 import com.android.dan.motoapp.api.Controller
 import com.android.dan.motoapp.api.HeaderInterceptor
+import com.android.dan.motoapp.database.login.LoginDao
+import com.android.dan.motoapp.database.login.LoginDatabase
 import com.android.dan.motoapp.database.moto.MotoDao
 import com.android.dan.motoapp.database.moto.MotoDatabase
 import com.android.dan.motoapp.repository.LoginRepository
@@ -25,25 +27,19 @@ class DataModule {
 
     @Singleton
     @Provides
-    fun getController(headerInterceptor: HeaderInterceptor):Controller{
+    fun getController(headerInterceptor: HeaderInterceptor): Controller {
         return Controller(headerInterceptor)
     }
 
     @Singleton
     @Provides
-    fun getApi(controller: Controller) : Api {
+    fun getApi(controller: Controller): Api {
         return controller.createService()
     }
 
     @Singleton
     @Provides
-    fun getLoginRepository(api : Api, sharedPreferencesModule: SharedPreferences) : LoginRepository{
-        return LoginRepository(api,sharedPreferencesModule)
-    }
-
-    @Singleton
-    @Provides
-    fun getDatabase(application: Application): MotoDatabase {
+    fun getMotoDatabase(application: Application): MotoDatabase {
         return Room.databaseBuilder(
             application.applicationContext,
             MotoDatabase::class.java,
@@ -53,20 +49,46 @@ class DataModule {
 
     @Singleton
     @Provides
-    fun getDatabaseDao(motoDatabase: MotoDatabase): MotoDao {
+    fun getMotoDatabaseDao(motoDatabase: MotoDatabase): MotoDao {
         return motoDatabase.getMotoDao()
     }
 
     @Singleton
     @Provides
-    fun getMotoRepository(api : Api, motoDao: MotoDao) : MotoRepository{
+    fun getLoginDatabase(application: Application): LoginDatabase {
+        return Room.databaseBuilder(
+            application.applicationContext,
+            LoginDatabase::class.java,
+            "login_database"
+        ).build()
+    }
+
+    @Singleton
+    @Provides
+    fun getLoginDatabaseDao(loginDatabase: LoginDatabase): LoginDao {
+        return loginDatabase.getLoginDao()
+    }
+
+    @Singleton
+    @Provides
+    fun getLoginRepository(
+        api: Api,
+        sharedPreferencesModule: SharedPreferences,
+        loginDao: LoginDao
+    ): LoginRepository {
+        return LoginRepository(api, sharedPreferencesModule, loginDao)
+    }
+
+    @Singleton
+    @Provides
+    fun getMotoRepository(api: Api, motoDao: MotoDao): MotoRepository {
         return MotoRepository(api, motoDao)
     }
 
     @Singleton
     @Provides
-    fun provideSharedPreferences(context: Context) : SharedPreferences {
-        return  PreferenceManager.getDefaultSharedPreferences(context)
+    fun provideSharedPreferences(context: Context): SharedPreferences {
+        return PreferenceManager.getDefaultSharedPreferences(context)
     }
 
 }
