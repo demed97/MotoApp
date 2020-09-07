@@ -1,6 +1,7 @@
 package com.android.dan.motoapp.ui.login
 
 import android.content.Context
+import android.content.Intent
 import android.net.ConnectivityManager
 import android.net.Network
 import android.net.NetworkRequest
@@ -13,6 +14,7 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import com.android.dan.motoapp.R
 import com.android.dan.motoapp.databinding.ActivityMainBinding
+import com.android.dan.motoapp.ui.moto.MotoActivity
 import com.android.dan.motoapp.utils.ViewModelFactory
 import com.google.android.material.snackbar.Snackbar
 import dagger.android.support.DaggerAppCompatActivity
@@ -39,7 +41,7 @@ class MainActivity : DaggerAppCompatActivity() {
 
     private fun observeToLiveData() {
         loginViewModel.chooseActivityLiveData.observe(this, Observer {
-            showSnackbar()
+            startActivity(Intent(this, MotoActivity::class.java))
         })
     }
 

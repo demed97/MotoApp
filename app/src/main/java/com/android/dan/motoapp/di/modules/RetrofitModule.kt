@@ -5,6 +5,7 @@ import com.android.dan.motoapp.api.Api
 import com.android.dan.motoapp.api.Controller
 import com.android.dan.motoapp.api.HeaderInterceptor
 import com.android.dan.motoapp.repository.LoginRepository
+import com.android.dan.motoapp.repository.MotoRepository
 import dagger.Module
 import dagger.Provides
 import javax.inject.Singleton
@@ -28,6 +29,12 @@ class RetrofitModule {
     @Provides
     fun getLoginRepository(api : Api, sharedPreferencesModule: SharedPreferences) : LoginRepository{
         return LoginRepository(api,sharedPreferencesModule)
+    }
+
+    @Singleton
+    @Provides
+    fun getMotoRepository(api : Api) : MotoRepository{
+        return MotoRepository(api)
     }
 
 }

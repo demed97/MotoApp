@@ -1,6 +1,7 @@
 package com.android.dan.motoapp.api
 
 import com.android.dan.motoapp.entities.Login
+import com.android.dan.motoapp.entities.Moto
 import com.android.dan.motoapp.entities.Token
 import retrofit2.Call
 import retrofit2.Response
@@ -12,5 +13,8 @@ interface Api {
 
     @POST("authorize/login")
    suspend fun login(@Body login: Login) : Response<Token>
+
+    @GET("moto")
+    suspend fun getMoto(): Response<List<Moto>>
 
 }

@@ -11,6 +11,6 @@ abstract class ActivityModule {
     @ContributesAndroidInjector
     abstract fun contributesMainActivity(): MainActivity
 
-//    @ContributesAndroidInjector
-//    abstract fun contributesMotoActivity(): MotoActivity
+    @ContributesAndroidInjector
+    abstract fun contributesMotoActivity(): MotoActivity
 }
