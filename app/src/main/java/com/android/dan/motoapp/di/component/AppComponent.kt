@@ -1,7 +1,6 @@
 package com.android.dan.motoapp.di.component
 
 import android.app.Application
-import com.android.dan.motoapp.App
 import com.android.dan.motoapp.di.modules.*
 import dagger.BindsInstance
 import dagger.Component
@@ -15,12 +14,13 @@ import javax.inject.Singleton
 @Singleton
 @Component(
     modules = [
+        DataModule::class,
         AndroidSupportInjectionModule::class,
         ActivityModule::class,
-        RetrofitModule::class,
-        SharedPreferencesModule::class,
+//        SharedPreferencesModule::class,
         ViewModelModule::class,
-        RecyclerModule::class]
+        RecyclerModule::class,
+    ]
 )
 interface AppComponent : AndroidInjector<DaggerApplication> {
 

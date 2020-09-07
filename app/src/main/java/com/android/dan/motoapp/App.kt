@@ -6,7 +6,6 @@ import com.android.dan.motoapp.di.component.DaggerAppComponent
 import dagger.android.AndroidInjector
 import dagger.android.DaggerApplication
 import dagger.android.DispatchingAndroidInjector
-import dagger.android.HasActivityInjector
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import javax.inject.Inject
 
