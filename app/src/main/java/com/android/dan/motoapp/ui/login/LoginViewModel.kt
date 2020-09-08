@@ -8,10 +8,7 @@ import androidx.lifecycle.viewModelScope
 import com.android.dan.motoapp.entities.Login
 import com.android.dan.motoapp.repository.LoginRepository
 import com.android.dan.motoapp.utils.Result
-import kotlinx.coroutines.CoroutineExceptionHandler
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.plus
+import kotlinx.coroutines.*
 import javax.inject.Inject
 
 class LoginViewModel @Inject constructor(private val loginRepository: LoginRepository) :
@@ -34,51 +31,53 @@ class LoginViewModel @Inject constructor(private val loginRepository: LoginRepos
 
     private val scope = viewModelScope + handler + Dispatchers.Default
 
-    fun login() {
+    fun loginClick() {
 //        val login = Login(email.value!!, password.value!!)
         scope.launch {
-            val result = loginRepository.apiLogin(login.value!!)
-            when (result) {
-                Result.SuccessResult(Unit) -> {
-                    loginRepository.isRememberLogin(login.value!!, check)
-                    Log.d("TAG", "${login.value!!.username}, ${login.value!!.password}")
-                    _chooseActivityLiveData.postValue(Unit)
-                }
-                else -> Log.d("TAG", (result as Result.ExceptionResult).exception)
+            loginUser(login.value!!)
+        }
+    }
+
+    private suspend fun loginUser(value: Login) {
+        val result = loginRepository.apiLogin(value)
+        when (result) {
+            Result.SuccessResult(Unit) -> {
+                loginRepository.isRememberLogin(login.value!!, check)
+                Log.d("success", "${login.value!!.username}, ${login.value!!.password}")
+                _chooseActivityLiveData.postValue(Unit)
             }
+            else -> Log.d("TAG", (result as Result.ExceptionResult).exception)
         }
     }
 
     fun checkAuthorization() {
         scope.launch {
-            val result = loginRepository.checkAuthorization()
+           val result = loginRepository.checkAuthorization()
             when (result) {
                 is Result.SuccessResult<*> -> {
                     result.result as Login
-                    Log.d("TAG", "do ${login.value!!.username}, ${login.value!!.password}")
+                    Log.d("check", "do ${result.result.username}, ${result.result.password}")
+//                    putLogin(result.result)
                     login.postValue(result.result)
-                    Log.d("TAG", "posle ${login.value!!.username}, ${login.value!!.password}")
+                    Log.d("check", "posle ${login.value!!.username}, ${login.value!!.password}")
                     check = true
-                    login()
+                    loginUser(result.result)
                 }
-                else -> Log.d("TAG", (result as Result.ExceptionResult).exception)
+                else -> {
+                    Log.d("check", (result as Result.ExceptionResult).exception)
+                }
             }
         }
     }
 
-//    private fun checkRemember() {
-//        if (check) {
-//
-//        }
-//        _checkLiveData.postValue(check)
-//    }
-
     fun onEnabled() {
         check = true
+        Log.d("check", "$check")
     }
 
     fun onDisabled() {
         check = false
+        Log.d("check", "$check")
     }
 
 }

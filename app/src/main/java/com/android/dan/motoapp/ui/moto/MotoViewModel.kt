@@ -6,6 +6,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.android.dan.motoapp.entities.Moto
+import com.android.dan.motoapp.repository.LoginRepository
 import com.android.dan.motoapp.repository.MotoRepository
 import com.android.dan.motoapp.utils.Result
 import kotlinx.coroutines.CoroutineExceptionHandler
@@ -14,7 +15,10 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.plus
 import javax.inject.Inject
 
-class MotoViewModel @Inject constructor(private val motoRepository: MotoRepository) : ViewModel() {
+class MotoViewModel @Inject constructor(
+    private val motoRepository: MotoRepository,
+    private val loginRepository: LoginRepository
+) : ViewModel() {
 
 
     private var _motoLiveData = MutableLiveData<List<Moto>>()
@@ -37,6 +41,12 @@ class MotoViewModel @Inject constructor(private val motoRepository: MotoReposito
                 is Result.SuccessResult<*> -> _motoLiveData.postValue(result.result as List<Moto>)
                 is Result.ExceptionResult -> Log.d("TAG", result.exception)
             }
+        }
+    }
+
+    fun deleteLogin(){
+        scope.launch {
+            loginRepository.deleteLogin()
         }
     }
 }

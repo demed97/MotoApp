@@ -42,9 +42,9 @@ class LoginRepository @Inject constructor(
 
     suspend fun checkAuthorization(): Result {
         val login = loginDao.getLogin()
-        return if (login.isEmpty()){
+        return if (login.isEmpty()) {
             Result.ExceptionResult("empty")
-        }else
+        } else
             Result.SuccessResult(login[0]!!)
 
     }
@@ -52,11 +52,15 @@ class LoginRepository @Inject constructor(
     suspend fun isRememberLogin(login: Login, check: Boolean) {
         if (check) {
             loginDao.addNewLogin(login)
-            Log.d("TAG", "${login.username}, ${login.password}")
+            Log.d("remember", "${login.username}, ${login.password}")
         }
 //        sharedPreferences.edit()
 //            .putBoolean("check", check)
 //            .apply()
+    }
+
+    suspend fun deleteLogin() {
+        loginDao.deleteLogin()
     }
 
 }

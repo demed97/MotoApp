@@ -45,7 +45,7 @@ class MainActivity : DaggerAppCompatActivity() {
     }
 
     private fun checkAuthorization() {
-        loginViewModel.checkAuthorization()
+       loginViewModel.checkAuthorization()
     }
 
     private fun observeToLiveData() {
@@ -56,6 +56,7 @@ class MainActivity : DaggerAppCompatActivity() {
 
     private fun startMotoActivity() {
         startActivity(Intent(this, MotoActivity::class.java))
+        finish()
     }
 
     private fun showSnackbar() {
